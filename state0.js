@@ -1,26 +1,41 @@
-var demo = {}, centerX = 1500 / 2, centerY = 1000 / 2, angelino, speed = 4;
+var demo = {}, centerX = 1500 / 2, centerY = 1000 / 2, angelino, speed = 7;
 demo.state0 = function(){};
 demo.state0.prototype = {
     preload: function(){
-        game.load.image('angelino', 'assets/sprites/angelino.png')
+        game.load.image('angelino', 'assets/sprites/angelino.png');
+        game.load.image('mountains', 'assets/backgrounds/mountainsBG.png');
     },
     create: function(){
+        game.physics.startSystem(Phaser.Physics.ARCADE);
         game.stage.backgroundColor = '#66ffcc';
         console.log('state0');       
         addChangeStateEventListeners();
-        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        
+        game.world.setBounds(0, 0, 2667, 1000);
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;        
+        var mountainsBG = game.add.sprite(0, 0, 'mountains');        
         angelino = game.add.sprite(centerX, centerY, 'angelino');
         angelino.anchor.setTo(0.5, 0.5);
+        angelino.scale.setTo(0.9, 0.9);
+        game.physics.enable(angelino);
+        angelino.body.collideWorldBounds = true;
+        
+        game.camera.follow(angelino);
+        game.camera.deadzone = new Phaser.Rectangle(centerX - 300, 0, 600, 1000);
+        
     },
     update: function(){
         if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            angelino.scale.setTo(-0.9, 0.9);
             angelino.x += speed;
         }
         else if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            angelino.scale.setTo(0.9, 0.9);
             angelino.x -= speed;
         }
         if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+            if(angelino.y < 584){
+                angelino.y = 584;
+            }
             angelino.y -= speed;
         }
         else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
@@ -28,6 +43,7 @@ demo.state0.prototype = {
         }
     }
 };
+
 
 function changeState(i, stateNum) {
     game.state.start('state' + stateNum);
