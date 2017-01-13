@@ -1,15 +1,32 @@
-var demo = {};
+var demo = {}, centerX = 1500 / 2, centerY = 1000 / 2, angelino, speed = 4;
 demo.state0 = function(){};
 demo.state0.prototype = {
-    preload: function(){},
+    preload: function(){
+        game.load.image('angelino', 'assets/sprites/angelino.png')
+    },
     create: function(){
         game.stage.backgroundColor = '#66ffcc';
         console.log('state0');       
         addChangeStateEventListeners();
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         
+        angelino = game.add.sprite(centerX, centerY, 'angelino');
+        angelino.anchor.setTo(0.5, 0.5);
     },
-    update: function(){}
+    update: function(){
+        if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+            angelino.x += speed;
+        }
+        else if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+            angelino.x -= speed;
+        }
+        if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+            angelino.y -= speed;
+        }
+        else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+            angelino.y += speed;
+        }
+    }
 };
 
 function changeState(i, stateNum) {
