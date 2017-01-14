@@ -2,7 +2,7 @@ var demo = {}, centerX = 1500 / 2, centerY = 1000 / 2, angelino, speed = 7;
 demo.state0 = function(){};
 demo.state0.prototype = {
     preload: function(){
-        game.load.image('angelino', 'assets/sprites/angelino.png');
+        game.load.spritesheet('angelino', 'assets/spritesheets/angelinoSheet.png', 250, 250);
         game.load.image('mountains', 'assets/backgrounds/mountainsBG.png');
     },
     create: function(){
@@ -18,6 +18,7 @@ demo.state0.prototype = {
         angelino.scale.setTo(0.9, 0.9);
         game.physics.enable(angelino);
         angelino.body.collideWorldBounds = true;
+        angelino.animations.add('walk', [0, 1]);
         
         game.camera.follow(angelino);
         game.camera.deadzone = new Phaser.Rectangle(centerX - 300, 0, 600, 1000);
@@ -27,10 +28,16 @@ demo.state0.prototype = {
         if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             angelino.scale.setTo(-0.9, 0.9);
             angelino.x += speed;
+            angelino.animations.play('walk', 8, true);
         }
         else if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             angelino.scale.setTo(0.9, 0.9);
             angelino.x -= speed;
+            angelino.animations.play('walk', 8, true);
+        }
+        else {
+            angelino.animations.stop('walk');
+            angelino.frame = 0;
         }
         if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
             if(angelino.y < 584){
